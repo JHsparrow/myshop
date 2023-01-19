@@ -35,7 +35,7 @@ public class SecurityConfig {
 		http.authorizeRequests()
 		.mvcMatchers("/css/**","/js/**","/img/**").permitAll()
 		.mvcMatchers("/","/members/**","/item/**","/images/**").permitAll()
-		.mvcMatchers("/admin/**").hasRole("AMDIN") // adimin' 으로 시작하는 경로는 계정이 ADMIN role일 경우 에만 접근 가능하도록 설정
+		.mvcMatchers("/admin/**").hasRole("ADMIN") // adimin' 으로 시작하는 경로는 계정이 ADMIN role일 경우 에만 접근 가능하도록 설정
 		.anyRequest().authenticated(); //그 외에 페이지는 모두 로그인 인증을 받아야한다.
 		
 		//인증되지 않은 사용자가 리소스에 접근했을때 설정
