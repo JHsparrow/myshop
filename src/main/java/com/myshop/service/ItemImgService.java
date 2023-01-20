@@ -1,5 +1,6 @@
 package com.myshop.service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -41,4 +42,22 @@ public class ItemImgService {
 		itemImgRepository.save(itemImg);
 		
 	}
+	
+	public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception {
+		if(!itemImgFile.isEmpty()) {
+			ItemImg savedItemImg = itemImgRepository.findById(itemImgId).orElseThrow(EntityNotFoundException::new);
+			
+			if(!StringUtils.isEmpty(savedItemImg.getImgName())) {
+				fileService.deleteFile(itemImgLocation + "/" + savedItemImg.getImgName());
+			}
+			String oriImgName = itemImgFile.getOriginalFilename(); //파일 이름
+			String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+			String imgUrl = "/images/item/" + imgName;
+			
+			//영속 상태 인것들은 자동으로 트랜잭션이 끝날때 
+			savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
+			
+		}
+	}
+	
 }
